@@ -21,22 +21,22 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             <img 
               src={attachment.url} 
               alt={attachment.name}
-              className="max-w-sm rounded-xl border border-slate-600 shadow-lg"
+              className="max-w-sm rounded-xl border border-orange-500/30 shadow-2xl tcs-gradient-border"
             />
           </div>
         );
       case 'file':
         return (
-          <div key={attachment.id} className="mt-3 p-3 bg-slate-700/50 rounded-xl border border-slate-600 max-w-sm shadow-lg">
+          <div key={attachment.id} className="mt-3 p-3 tcs-card rounded-xl border border-orange-500/30 max-w-sm shadow-2xl">
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-blue-400" />
+              <FileText className="w-5 h-5 text-orange-400" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate text-slate-200">{attachment.name}</p>
                 <p className="text-xs text-slate-400">
                   {attachment.size ? `${(attachment.size / 1024).toFixed(1)} KB` : 'File'}
                 </p>
               </div>
-              <Button variant="ghost" size="sm" className="text-blue-400 hover:bg-slate-600">
+              <Button variant="ghost" size="sm" className="text-orange-400 hover:bg-orange-500/10 border border-transparent hover:border-orange-500/30">
                 <Download className="w-4 h-4" />
               </Button>
             </div>
@@ -50,7 +50,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   return (
     <div className={`flex gap-4 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
       {message.sender === 'assistant' && (
-        <div className="w-10 h-10 tcs-gradient rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+        <div className="w-10 h-10 tcs-gradient rounded-xl flex items-center justify-center flex-shrink-0 shadow-2xl tcs-logo-glow">
           <Bot className="w-5 h-5 text-white" />
         </div>
       )}
@@ -68,7 +68,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       </div>
       
       {message.sender === 'user' && (
-        <div className="w-10 h-10 bg-slate-700 border border-slate-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+        <div className="w-10 h-10 bg-slate-700/80 border border-orange-500/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-2xl backdrop-blur-sm">
           <User className="w-5 h-5 text-slate-300" />
         </div>
       )}

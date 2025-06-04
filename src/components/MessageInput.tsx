@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -139,25 +138,25 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
                   <img 
                     src={attachment.url} 
                     alt={attachment.name}
-                    className="w-16 h-16 object-cover rounded-lg border border-slate-600 shadow-lg"
+                    className="w-16 h-16 object-cover rounded-lg border border-orange-500/30 shadow-lg tcs-gradient-border"
                   />
                   <Button
                     variant="destructive"
                     size="sm"
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-red-500 to-red-600"
                     onClick={() => removeAttachment(attachment.id)}
                   >
                     ×
                   </Button>
                 </div>
               ) : (
-                <div className="relative flex items-center gap-2 p-2 bg-slate-700 rounded-lg border border-slate-600 max-w-40 shadow-lg">
-                  <FileText className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                <div className="relative flex items-center gap-2 p-2 tcs-card rounded-lg border border-orange-500/30 max-w-40 shadow-lg">
+                  <FileText className="w-4 h-4 text-orange-400 flex-shrink-0" />
                   <span className="text-xs truncate text-slate-200">{attachment.name}</span>
                   <Button
                     variant="destructive"
                     size="sm"
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-red-500 to-red-600"
                     onClick={() => removeAttachment(attachment.id)}
                   >
                     ×
@@ -170,13 +169,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
       )}
 
       {/* Input area */}
-      <div className="flex items-end gap-3 p-4 border border-slate-600 rounded-2xl bg-slate-800 shadow-xl backdrop-blur-sm">
+      <div className="flex items-end gap-3 p-4 rounded-2xl tcs-input-gradient shadow-2xl backdrop-blur-sm">
         {/* Attachment buttons */}
         <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-slate-700 transition-all"
+            className="w-9 h-9 text-slate-400 hover:text-orange-400 hover:bg-orange-500/10 transition-all border border-transparent hover:border-orange-500/30"
             onClick={() => fileInputRef.current?.click()}
             title="Attach file"
           >
@@ -186,7 +185,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-slate-700 transition-all"
+            className="w-9 h-9 text-slate-400 hover:text-purple-400 hover:bg-purple-500/10 transition-all border border-transparent hover:border-purple-500/30"
             onClick={handleScreenCapture}
             title="Capture screen"
           >
@@ -197,10 +196,10 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
             variant="ghost"
             size="icon"
             className={cn(
-              "w-9 h-9 transition-all",
+              "w-9 h-9 transition-all border border-transparent",
               isRecording 
-                ? "bg-red-500/20 text-red-400 hover:bg-red-500/30" 
-                : "text-slate-400 hover:text-blue-400 hover:bg-slate-700"
+                ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30" 
+                : "text-slate-400 hover:text-pink-400 hover:bg-pink-500/10 hover:border-pink-500/30"
             )}
             onClick={toggleRecording}
             title={isRecording ? "Stop recording" : "Voice input"}
@@ -224,7 +223,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
         <Button
           onClick={handleSend}
           disabled={!message.trim() && attachments.length === 0}
-          className="w-10 h-10 rounded-xl tcs-gradient shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="w-10 h-10 rounded-xl tcs-gradient shadow-2xl hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 border-0"
           size="icon"
         >
           <Send className="w-4 h-4" />
@@ -253,7 +252,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
             key={suggestion}
             variant="outline"
             size="sm"
-            className="text-xs tcs-button-secondary border-slate-600 hover:border-blue-500 transition-all"
+            className="text-xs tcs-button-secondary border-orange-500/30 hover:border-orange-500/50 hover:bg-gradient-to-r hover:from-orange-500/10 hover:to-purple-500/10 transition-all"
             onClick={() => setMessage(suggestion)}
           >
             {suggestion}
