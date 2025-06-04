@@ -66,7 +66,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   const handleScreenCapture = async () => {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({ 
-        video: { mediaSource: 'screen' } 
+        video: true 
       });
       
       // Create a video element to capture the frame
