@@ -35,7 +35,6 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
 
   const toggleRecording = () => {
     if (!isRecording) {
-      // Start recording
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(() => {
           setIsRecording(true);
@@ -52,13 +51,11 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           });
         });
     } else {
-      // Stop recording
       setIsRecording(false);
       toast({
         title: "Recording stopped",
         description: "Voice message will be processed...",
       });
-      // In a real implementation, you would process the audio here
       setMessage(prev => prev + " [Voice message recorded]");
     }
   };
@@ -69,13 +66,11 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
         video: true 
       });
       
-      // Create a video element to capture the frame
       const video = document.createElement('video');
       video.srcObject = stream;
       video.play();
       
       video.addEventListener('loadedmetadata', () => {
-        // Create canvas to capture the screenshot
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -83,7 +78,6 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(video, 0, 0);
         
-        // Convert to blob and create attachment
         canvas.toBlob((blob) => {
           if (blob) {
             const attachment = {
@@ -97,7 +91,6 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           }
         }, 'image/png');
         
-        // Stop the stream
         stream.getTracks().forEach(track => track.stop());
       });
       
@@ -146,7 +139,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
                   <img 
                     src={attachment.url} 
                     alt={attachment.name}
-                    className="w-16 h-16 object-cover rounded-lg border"
+                    className="w-16 h-16 object-cover rounded-lg border border-slate-600 shadow-lg"
                   />
                   <Button
                     variant="destructive"
@@ -158,9 +151,9 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
                   </Button>
                 </div>
               ) : (
-                <div className="relative flex items-center gap-2 p-2 bg-gray-100 rounded-lg border max-w-40">
-                  <FileText className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                  <span className="text-xs truncate">{attachment.name}</span>
+                <div className="relative flex items-center gap-2 p-2 bg-slate-700 rounded-lg border border-slate-600 max-w-40 shadow-lg">
+                  <FileText className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                  <span className="text-xs truncate text-slate-200">{attachment.name}</span>
                   <Button
                     variant="destructive"
                     size="sm"
@@ -177,13 +170,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
       )}
 
       {/* Input area */}
-      <div className="flex items-end gap-2 p-3 border rounded-2xl bg-white shadow-sm">
+      <div className="flex items-end gap-3 p-4 border border-slate-600 rounded-2xl bg-slate-800 shadow-xl backdrop-blur-sm">
         {/* Attachment buttons */}
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9"
+            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-slate-700 transition-all"
             onClick={() => fileInputRef.current?.click()}
             title="Attach file"
           >
@@ -193,7 +186,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9"
+            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-slate-700 transition-all"
             onClick={handleScreenCapture}
             title="Capture screen"
           >
@@ -203,7 +196,12 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Button
             variant="ghost"
             size="icon"
-            className={cn("w-9 h-9", isRecording && "bg-red-100 text-red-600")}
+            className={cn(
+              "w-9 h-9 transition-all",
+              isRecording 
+                ? "bg-red-500/20 text-red-400 hover:bg-red-500/30" 
+                : "text-slate-400 hover:text-blue-400 hover:bg-slate-700"
+            )}
             onClick={toggleRecording}
             title={isRecording ? "Stop recording" : "Voice input"}
           >
@@ -218,7 +216,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Describe your IT issue, attach files, capture screen, or use voice input..."
-          className="flex-1 min-h-[20px] max-h-32 resize-none border-0 shadow-none focus-visible:ring-0 p-0"
+          className="flex-1 min-h-[24px] max-h-32 resize-none border-0 shadow-none focus-visible:ring-0 p-0 bg-transparent text-slate-100 placeholder:text-slate-500"
           rows={1}
         />
 
@@ -226,7 +224,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
         <Button
           onClick={handleSend}
           disabled={!message.trim() && attachments.length === 0}
-          className="w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-700"
+          className="w-10 h-10 rounded-xl tcs-gradient shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           size="icon"
         >
           <Send className="w-4 h-4" />
@@ -245,12 +243,17 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
 
       {/* Input suggestions */}
       <div className="flex flex-wrap gap-2">
-        {['My computer won\'t start', 'Software installation help', 'Network connectivity issues', 'Password reset'].map((suggestion) => (
+        {[
+          'Server connectivity issues', 
+          'Software installation help', 
+          'Network configuration', 
+          'Security incident report'
+        ].map((suggestion) => (
           <Button
             key={suggestion}
             variant="outline"
             size="sm"
-            className="text-xs"
+            className="text-xs tcs-button-secondary border-slate-600 hover:border-blue-500 transition-all"
             onClick={() => setMessage(suggestion)}
           >
             {suggestion}
