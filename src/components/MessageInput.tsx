@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Paperclip, Mic, MicOff, Image, FileText, Camera } from 'lucide-react';
+import { Send, Paperclip, Mic, MicOff, Camera, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -16,7 +16,6 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   const [attachments, setAttachments] = useState<any[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const handleSend = () => {
@@ -61,6 +60,57 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
       });
       // In a real implementation, you would process the audio here
       setMessage(prev => prev + " [Voice message recorded]");
+    }
+  };
+
+  const handleScreenCapture = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ 
+        video: { mediaSource: 'screen' } 
+      });
+      
+      // Create a video element to capture the frame
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+      
+      video.addEventListener('loadedmetadata', () => {
+        // Create canvas to capture the screenshot
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(video, 0, 0);
+        
+        // Convert to blob and create attachment
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const attachment = {
+              id: Date.now().toString() + Math.random(),
+              name: `screenshot-${new Date().toISOString()}.png`,
+              type: 'image',
+              url: URL.createObjectURL(blob),
+              size: blob.size,
+            };
+            setAttachments(prev => [...prev, attachment]);
+          }
+        }, 'image/png');
+        
+        // Stop the stream
+        stream.getTracks().forEach(track => track.stop());
+      });
+      
+      toast({
+        title: "Screen captured",
+        description: "Screenshot has been added to your message.",
+      });
+    } catch (error) {
+      toast({
+        title: "Screen capture failed",
+        description: "Unable to capture screen. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -144,10 +194,10 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
             variant="ghost"
             size="icon"
             className="w-9 h-9"
-            onClick={() => imageInputRef.current?.click()}
-            title="Attach image"
+            onClick={handleScreenCapture}
+            title="Capture screen"
           >
-            <Image className="w-4 h-4" />
+            <Camera className="w-4 h-4" />
           </Button>
           
           <Button
@@ -167,7 +217,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Describe your IT issue, attach screenshots, or use voice input..."
+          placeholder="Describe your IT issue, attach files, capture screen, or use voice input..."
           className="flex-1 min-h-[20px] max-h-32 resize-none border-0 shadow-none focus-visible:ring-0 p-0"
           rows={1}
         />
@@ -182,23 +232,14 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Send className="w-4 h-4" />
         </Button>
 
-        {/* Hidden file inputs */}
+        {/* Hidden file input */}
         <input
           ref={fileInputRef}
           type="file"
           multiple
           className="hidden"
           onChange={handleFileUpload}
-          accept=".pdf,.doc,.docx,.txt,.log,.zip,.rar"
-        />
-        
-        <input
-          ref={imageInputRef}
-          type="file"
-          multiple
-          className="hidden"
-          onChange={handleFileUpload}
-          accept="image/*"
+          accept=".pdf,.doc,.docx,.txt,.log,.zip,.rar,image/*"
         />
       </div>
 
