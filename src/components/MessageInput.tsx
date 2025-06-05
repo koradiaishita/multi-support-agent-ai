@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,15 +5,23 @@ import { Send, Paperclip, Mic, Camera, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import VoiceInputPopup from './VoiceInputPopup';
+import ExportData from './ExportData';
 
 interface MessageInputProps {
   onSendMessage: (content: string, attachments?: any[]) => void;
+  conversationData?: any;
+  onClearConversation?: () => void;
 }
 
-const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
+const MessageInput: React.FC<MessageInputProps> = ({ 
+  onSendMessage, 
+  conversationData,
+  onClearConversation 
+}) => {
   const [message, setMessage] = useState('');
   const [attachments, setAttachments] = useState<any[]>([]);
   const [isVoicePopupOpen, setIsVoicePopupOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -37,6 +44,23 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   const handleVoiceTranscript = (transcript: string) => {
     // Add the transcript to the current message
     setMessage(prev => prev ? `${prev} ${transcript}` : transcript);
+  };
+
+  const handleResetText = () => {
+    setMessage('');
+    setAttachments([]);
+    toast({
+      title: "Reset Complete",
+      description: "Text input and attachments cleared.",
+    });
+  };
+
+  const handleToggleMute = () => {
+    setIsMuted(!isMuted);
+    toast({
+      title: isMuted ? "Voice Unmuted" : "Voice Muted",
+      description: `Voice responses are now ${isMuted ? 'enabled' : 'disabled'}.`,
+    });
   };
 
   const handleScreenCapture = async () => {
@@ -108,6 +132,17 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
 
   return (
     <div className="space-y-3">
+      {/* Export Data Controls */}
+      <div className="flex justify-end">
+        <ExportData
+          onResetText={handleResetText}
+          onToggleMute={handleToggleMute}
+          isMuted={isMuted}
+          onClearConversation={onClearConversation || (() => {})}
+          conversationData={conversationData}
+        />
+      </div>
+
       {/* Attachments preview */}
       {attachments.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -118,7 +153,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
                   <img 
                     src={attachment.url} 
                     alt={attachment.name}
-                    className="w-16 h-16 object-cover rounded-lg border border-orange-500/30 shadow-lg tcs-gradient-border"
+                    className="w-16 h-16 object-cover rounded-lg border border-blue-500/30 shadow-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10"
                   />
                   <Button
                     variant="destructive"
@@ -130,8 +165,8 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
                   </Button>
                 </div>
               ) : (
-                <div className="relative flex items-center gap-2 p-2 tcs-card rounded-lg border border-orange-500/30 max-w-40 shadow-lg">
-                  <FileText className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                <div className="relative flex items-center gap-2 p-2 bg-gradient-to-r from-slate-800/80 to-blue-800/80 rounded-lg border border-blue-500/30 max-w-40 shadow-lg backdrop-blur-sm">
+                  <FileText className="w-4 h-4 text-blue-400 flex-shrink-0" />
                   <span className="text-xs truncate text-slate-200">{attachment.name}</span>
                   <Button
                     variant="destructive"
@@ -149,13 +184,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
       )}
 
       {/* Input area */}
-      <div className="flex items-end gap-3 p-4 rounded-2xl tcs-input-gradient shadow-2xl backdrop-blur-sm">
+      <div className="flex items-end gap-3 p-4 rounded-2xl bg-gradient-to-r from-slate-800/90 to-blue-800/80 shadow-2xl backdrop-blur-sm border border-blue-500/20">
         {/* Attachment buttons */}
         <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 text-slate-400 hover:text-orange-400 hover:bg-orange-500/10 transition-all border border-transparent hover:border-orange-500/30"
+            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all border border-transparent hover:border-blue-500/30"
             onClick={() => fileInputRef.current?.click()}
             title="Attach file"
           >
@@ -175,7 +210,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 text-slate-400 hover:text-pink-400 hover:bg-pink-500/10 transition-all border border-transparent hover:border-pink-500/30"
+            className="w-9 h-9 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all border border-transparent hover:border-blue-500/30"
             onClick={() => setIsVoicePopupOpen(true)}
             title="Voice input"
           >
@@ -198,7 +233,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
         <Button
           onClick={handleSend}
           disabled={!message.trim() && attachments.length === 0}
-          className="w-10 h-10 rounded-xl tcs-gradient shadow-2xl hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 border-0"
+          className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-2xl hover:shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 border-0"
           size="icon"
         >
           <Send className="w-4 h-4" />
@@ -227,7 +262,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
             key={suggestion}
             variant="outline"
             size="sm"
-            className="text-xs tcs-button-secondary border-orange-500/30 hover:border-orange-500/50 hover:bg-gradient-to-r hover:from-orange-500/10 hover:to-purple-500/10 transition-all"
+            className="text-xs bg-slate-700/80 hover:bg-slate-600/80 text-slate-200 border-blue-500/30 hover:border-blue-500/50 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 transition-all"
             onClick={() => setMessage(suggestion)}
           >
             {suggestion}
