@@ -53,7 +53,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           <div className="flex items-center justify-center mb-4">
             <img 
               src="/lovable-uploads/bc6f9ae1-01dc-4a32-a2d2-d22d1b0abacf.png" 
-              alt="TCS Logo" 
+              alt="Tia Logo" 
               className="h-12 w-auto object-contain tcs-logo-glow mr-4"
             />
             <h2 className="text-3xl font-bold text-white">
@@ -61,7 +61,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
             </h2>
           </div>
           <p className="text-lg tcs-gradient-text font-semibold mb-4">
-            Enterprise-grade AI assistant powered by TCS innovation
+            Enterprise-grade AI assistant powered by Tia innovation
           </p>
           <p className="text-slate-400 max-w-md leading-relaxed">
             Experience next-generation technical support with advanced AI capabilities. 

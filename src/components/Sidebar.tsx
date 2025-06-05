@@ -57,13 +57,13 @@ const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center justify-center tcs-logo-glow">
               <img 
                 src="/lovable-uploads/bc6f9ae1-01dc-4a32-a2d2-d22d1b0abacf.png" 
-                alt="TCS Logo" 
+                alt="Tia Logo" 
                 className="h-8 w-auto object-contain"
               />
             </div>
             {isOpen && (
               <div>
-                <h1 className="font-bold text-lg text-white">TCS IT Support</h1>
+                <h1 className="font-bold text-lg text-white">Tia IT Support Agents</h1>
                 <p className="text-sm tcs-gradient-text font-medium">AI-Powered Assistant</p>
               </div>
             )}
