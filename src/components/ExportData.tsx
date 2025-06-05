@@ -18,7 +18,8 @@ import {
   Trash2, 
   Copy, 
   Mail,
-  Share2
+  Database,
+  FileSpreadsheet
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -82,6 +83,36 @@ const ExportData: React.FC<ExportDataProps> = ({
     });
   };
 
+  const handleExportCSV = () => {
+    if (!conversationData?.messages) return;
+    
+    const csvHeaders = 'Timestamp,Role,Content\n';
+    const csvContent = conversationData.messages
+      .map((msg: any) => {
+        const timestamp = msg.timestamp ? new Date(msg.timestamp).toISOString() : new Date().toISOString();
+        const role = msg.sender || msg.role || 'unknown';
+        const content = `"${msg.content.replace(/"/g, '""')}"`;
+        return `${timestamp},${role},${content}`;
+      })
+      .join('\n');
+    
+    const csvData = csvHeaders + csvContent;
+    const dataBlob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `conversation-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Export Complete",
+      description: "Conversation exported as CSV file.",
+    });
+  };
+
   const handleCopyToClipboard = async () => {
     if (!conversationData?.messages) return;
     
@@ -122,6 +153,7 @@ const ExportData: React.FC<ExportDataProps> = ({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
+          size="sm"
           className="bg-slate-700/80 hover:bg-slate-600/80 text-slate-200 border-slate-600/50 backdrop-blur-sm hover:border-blue-500/50 transition-all"
         >
           <Download className="w-4 h-4 mr-2" />
@@ -129,29 +161,42 @@ const ExportData: React.FC<ExportDataProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="w-64 bg-slate-800/95 border-slate-600/50 backdrop-blur-lg shadow-2xl" 
+        className="w-64 bg-slate-800/95 border-slate-600/50 backdrop-blur-lg shadow-2xl z-50" 
         align="end"
       >
         <DropdownMenuLabel className="text-slate-200 font-semibold">
-          Export Options
+          Export Formats
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-600/50" />
-        
-        <DropdownMenuItem 
-          onClick={handleExportJSON}
-          className="text-slate-200 hover:bg-blue-500/20 hover:text-white cursor-pointer"
-        >
-          <FileText className="w-4 h-4 mr-2" />
-          Export as JSON
-        </DropdownMenuItem>
         
         <DropdownMenuItem 
           onClick={handleExportText}
           className="text-slate-200 hover:bg-blue-500/20 hover:text-white cursor-pointer"
         >
           <FileText className="w-4 h-4 mr-2" />
-          Export as Text
+          Export as TXT
         </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={handleExportCSV}
+          className="text-slate-200 hover:bg-blue-500/20 hover:text-white cursor-pointer"
+        >
+          <FileSpreadsheet className="w-4 h-4 mr-2" />
+          Export as CSV
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={handleExportJSON}
+          className="text-slate-200 hover:bg-blue-500/20 hover:text-white cursor-pointer"
+        >
+          <Database className="w-4 h-4 mr-2" />
+          Export as JSON
+        </DropdownMenuItem>
+        
+        <DropdownMenuSeparator className="bg-slate-600/50" />
+        <DropdownMenuLabel className="text-slate-200 font-semibold">
+          Quick Actions
+        </DropdownMenuLabel>
         
         <DropdownMenuItem 
           onClick={handleCopyToClipboard}

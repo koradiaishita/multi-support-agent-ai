@@ -2,23 +2,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Menu, Download, Settings, Bot } from 'lucide-react';
+import { Menu, Download, Settings, Bot, RotateCcw } from 'lucide-react';
 import { Conversation } from '@/types/chat';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
+import ExportData from './ExportData';
 
 interface ChatAreaProps {
   conversation?: Conversation;
   onSendMessage: (content: string, sender: 'user' | 'assistant', attachments?: any[]) => void;
   onToggleSidebar: () => void;
+  onResetChat?: () => void;
 }
 
 const ChatArea: React.FC<ChatAreaProps> = ({
   conversation,
   onSendMessage,
   onToggleSidebar,
+  onResetChat,
 }) => {
   const [isTyping, setIsTyping] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,6 +43,20 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       setTimeout(() => {
         setIsTyping(false);
       }, 1500);
+    }
+  };
+
+  const handleResetText = () => {
+    // This will be handled by the message input component
+  };
+
+  const handleToggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
+  const handleClearConversation = () => {
+    if (onResetChat) {
+      onResetChat();
     }
   };
 
@@ -107,10 +125,22 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="tcs-button-secondary border-orange-500/30 hover:border-orange-500/50">
-            <Download className="w-4 h-4 mr-2" />
-            Export Chat
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="tcs-button-secondary border-orange-500/30 hover:border-orange-500/50"
+            onClick={handleClearConversation}
+          >
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset Chat
           </Button>
+          <ExportData
+            onResetText={handleResetText}
+            onToggleMute={handleToggleMute}
+            isMuted={isMuted}
+            onClearConversation={handleClearConversation}
+            conversationData={conversation}
+          />
         </div>
       </div>
 
