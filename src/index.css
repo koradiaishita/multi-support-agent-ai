@@ -98,21 +98,21 @@
 
 @layer utilities {
   .tcs-gradient {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 50%, #7c2d12 100%);
   }
   
   .tcs-gradient-subtle {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(220, 38, 38, 0.1) 50%, rgba(124, 45, 18, 0.1) 100%);
   }
 
   .tcs-gradient-border {
     border: 2px solid transparent;
     background: linear-gradient(135deg, #0f172a, #1e293b) padding-box,
-                linear-gradient(135deg, #3b82f6, #8b5cf6) border-box;
+                linear-gradient(135deg, #f97316, #dc2626) border-box;
   }
 
   .tcs-gradient-text {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 50%, #7c2d12 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -123,8 +123,8 @@
   }
   
   .chat-bubble-user {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-    @apply text-white ml-auto shadow-2xl border border-blue-500/30;
+    background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+    @apply text-white ml-auto shadow-2xl border border-emerald-500/30;
   }
   
   .chat-bubble-assistant {
@@ -137,7 +137,8 @@
   }
   
   .typing-dot {
-    @apply w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-bounce;
+    @apply w-2 h-2 rounded-full animate-bounce;
+    background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
   }
   
   .typing-dot:nth-child(2) {
@@ -154,8 +155,8 @@
   }
 
   .tcs-button-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-    @apply text-white shadow-2xl transition-all duration-300 hover:shadow-blue-500/25 hover:scale-105;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+    @apply text-white shadow-2xl transition-all duration-300 hover:shadow-purple-500/25 hover:scale-105;
   }
 
   .tcs-button-secondary {
@@ -163,19 +164,23 @@
   }
 
   .tcs-header-gradient {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.9) 50%, rgba(15, 23, 42, 0.95) 100%);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.2);
   }
 
   .tcs-sidebar-gradient {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 58, 138, 0.95) 100%);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 58, 138, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%);
     backdrop-filter: blur(20px);
   }
 
   .tcs-input-gradient {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(30, 58, 138, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(30, 58, 138, 0.8) 50%, rgba(30, 41, 59, 0.9) 100%);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+  }
+
+  .tcs-logo-glow {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), 0 0 40px rgba(220, 38, 38, 0.2);
   }
 }

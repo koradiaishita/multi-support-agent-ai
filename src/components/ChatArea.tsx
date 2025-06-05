@@ -63,7 +63,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   if (!conversation) {
     return (
       <div className="flex-1 flex items-center justify-center bg-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900"></div>
         <div className="text-center relative z-10">
           <div className="w-20 h-20 tcs-gradient rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl tcs-logo-glow">
             <Bot className="w-10 h-10 text-white" />
@@ -87,9 +87,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           </p>
           <div className="mt-8 flex justify-center space-x-4">
             <div className="w-2 h-2 bg-orange-500 rounded-full animate-bounce"></div>
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-            <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0.3s'}}></div>
+            <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{animationDelay: '0.3s'}}></div>
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
   return (
     <div className="flex-1 flex flex-col bg-slate-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900"></div>
       
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-orange-500/20 tcs-header-gradient relative z-10">

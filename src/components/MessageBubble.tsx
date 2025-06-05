@@ -68,7 +68,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       </div>
       
       {message.sender === 'user' && (
-        <div className="w-10 h-10 bg-slate-700/80 border border-orange-500/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-2xl backdrop-blur-sm">
+        <div className="w-10 h-10 bg-slate-700/80 border border-emerald-500/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-2xl backdrop-blur-sm">
           <User className="w-5 h-5 text-slate-300" />
         </div>
       )}
