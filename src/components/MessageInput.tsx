@@ -1,9 +1,11 @@
+
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Paperclip, Mic, MicOff, Camera, FileText } from 'lucide-react';
+import { Send, Paperclip, Mic, Camera, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import VoiceInputPopup from './VoiceInputPopup';
 
 interface MessageInputProps {
   onSendMessage: (content: string, attachments?: any[]) => void;
@@ -11,8 +13,8 @@ interface MessageInputProps {
 
 const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   const [message, setMessage] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
   const [attachments, setAttachments] = useState<any[]>([]);
+  const [isVoicePopupOpen, setIsVoicePopupOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -32,31 +34,9 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
     }
   };
 
-  const toggleRecording = () => {
-    if (!isRecording) {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(() => {
-          setIsRecording(true);
-          toast({
-            title: "Recording started",
-            description: "Speak your message. Click the mic again to stop.",
-          });
-        })
-        .catch(() => {
-          toast({
-            title: "Microphone access denied",
-            description: "Please allow microphone access to use voice input.",
-            variant: "destructive",
-          });
-        });
-    } else {
-      setIsRecording(false);
-      toast({
-        title: "Recording stopped",
-        description: "Voice message will be processed...",
-      });
-      setMessage(prev => prev + " [Voice message recorded]");
-    }
+  const handleVoiceTranscript = (transcript: string) => {
+    // Add the transcript to the current message
+    setMessage(prev => prev ? `${prev} ${transcript}` : transcript);
   };
 
   const handleScreenCapture = async () => {
@@ -195,16 +175,11 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           <Button
             variant="ghost"
             size="icon"
-            className={cn(
-              "w-9 h-9 transition-all border border-transparent",
-              isRecording 
-                ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30" 
-                : "text-slate-400 hover:text-pink-400 hover:bg-pink-500/10 hover:border-pink-500/30"
-            )}
-            onClick={toggleRecording}
-            title={isRecording ? "Stop recording" : "Voice input"}
+            className="w-9 h-9 text-slate-400 hover:text-pink-400 hover:bg-pink-500/10 transition-all border border-transparent hover:border-pink-500/30"
+            onClick={() => setIsVoicePopupOpen(true)}
+            title="Voice input"
           >
-            {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            <Mic className="w-4 h-4" />
           </Button>
         </div>
 
@@ -259,6 +234,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
           </Button>
         ))}
       </div>
+
+      {/* Voice Input Popup */}
+      <VoiceInputPopup
+        isOpen={isVoicePopupOpen}
+        onClose={() => setIsVoicePopupOpen(false)}
+        onSendTranscript={handleVoiceTranscript}
+      />
     </div>
   );
 };
