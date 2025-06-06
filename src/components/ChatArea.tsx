@@ -125,15 +125,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="tcs-button-secondary border-orange-500/30 hover:border-orange-500/50"
-            onClick={handleClearConversation}
-          >
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Reset Chat
-          </Button>
           <ExportData
             onResetText={handleResetText}
             onToggleMute={handleToggleMute}
