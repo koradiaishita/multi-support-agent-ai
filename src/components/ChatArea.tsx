@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -122,6 +123,24 @@ const ChatArea: React.FC<ChatAreaProps> = ({
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleClearConversation}
+            className="bg-slate-700/80 hover:bg-slate-600/80 text-slate-200 border-slate-600/50 backdrop-blur-sm hover:border-red-500/50 transition-all"
+          >
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset Chat
+          </Button>
+          <ExportData
+            onResetText={handleResetText}
+            onToggleMute={handleToggleMute}
+            isMuted={isMuted}
+            onClearConversation={handleClearConversation}
+            conversationData={conversation}
+          />
         </div>
       </div>
 
