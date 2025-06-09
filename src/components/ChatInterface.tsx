@@ -1,30 +1,43 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import ChatArea from './ChatArea';
 import { Message, Conversation } from '@/types/chat';
+import { chatApi } from '@/api/chat';
+import { useToast } from '@/hooks/use-toast';
 
 const ChatInterface = () => {
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: '1',
-      title: 'IT Support Session',
-      messages: [
-        {
-          id: '1',
-          content: "Hello! I'm your IT Support Agent powered by AI. How can I help you today?",
-          sender: 'assistant',
-          timestamp: new Date(),
-        }
-      ],
-      createdAt: new Date(),
-    }
-  ]);
-  
-  const [activeConversationId, setActiveConversationId] = useState('1');
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const activeConversation = conversations.find(conv => conv.id === activeConversationId);
+
+  // Fetch conversations on component mount
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        setIsLoading(true);
+        const data = await chatApi.getConversations();
+        setConversations(data);
+        if (data.length > 0) {
+          setActiveConversationId(data[0].id);
+        }
+      } catch (error) {
+        console.error('Error fetching conversations:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load conversations',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConversations();
+  }, []);
 
   const addMessage = (content: string, sender: 'user' | 'assistant', attachments?: any[]) => {
     const newMessage: Message = {

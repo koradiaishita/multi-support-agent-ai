@@ -132,17 +132,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <div className="space-y-3">
-      {/* Export Data Controls */}
-      <div className="flex justify-end">
-        <ExportData
-          onResetText={handleResetText}
-          onToggleMute={handleToggleMute}
-          isMuted={isMuted}
-          onClearConversation={onClearConversation || (() => {})}
-          conversationData={conversationData}
-        />
-      </div>
-
       {/* Attachments preview */}
       {attachments.length > 0 && (
         <div className="flex flex-wrap gap-2">

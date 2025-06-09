@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Message } from '@/types/chat';
 import { Bot, User, Download, FileText } from 'lucide-react';
@@ -17,11 +16,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
     switch (attachment.type) {
       case 'image':
         return (
-          <div key={attachment.id} className="mt-3">
+          <div key={attachment.id} className="mt-3 flex justify-center">
             <img 
               src={attachment.url} 
               alt={attachment.name}
-              className="max-w-sm rounded-xl border border-orange-500/30 shadow-2xl tcs-gradient-border"
+              style={{ maxWidth: '400px', maxHeight: '250px', objectFit: 'contain', border: '1px solid #f59e42', borderRadius: '12px', background: '#18181b' }}
+              className="rounded-xl shadow-2xl tcs-gradient-border"
             />
           </div>
         );
